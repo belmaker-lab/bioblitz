@@ -210,7 +210,7 @@ clean_full_data <- function(complete_data_function,get_terrain = F){
            Season = if_else(between(lubridate::month(Date),left = 3,right = 7),"Spring","Fall"), #create Season column
            Year = lubridate::year(Date)) %>% #create Year column
     rowwise() %>% 
-           mutate(Mean_Depth = mean(c(`Depth Start`,`Depth End`),na.rm = T), #create Mean_Depth columnn
+    mutate(Mean_Depth = mean(c(`Depth Start`,`Depth End`),na.rm = T), #create Mean_Depth columnn
            Depth_Category = cut(Mean_Depth,
                                 breaks = c(0,9,17.4,Inf), #breaks for each category
                                 labels = c("shallow","medium","deep"))) #create Depth_Category columnn

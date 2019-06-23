@@ -235,3 +235,54 @@ add_species_data <- function(complete_data_function_cleaner){
   return(bioblitz.data)
 }
 
+correct_species_name <- function(complete_data_function) {
+  #find uppercase species name               
+  species.with.uppercase <- complete_data_function %>% 
+    filter(stringr::str_detect(Species," [A-Z]")) %>% 
+    .$Species
+  
+  #find multiple spaces
+  species.with.double.spaces <- complete_data_function %>% 
+    filter(stringr::str_detect(Species,"  ")) %>% 
+    .$Species
+  
+  #find space at beginning
+  species.with.space.at.beginning <- complete_data_function %>% 
+    filter(stringr::str_detect(Species,"^[ ]")) %>% 
+    .$Species
+  
+  #find trailing space
+  species.with.trailing.space <- complete_data_function %>% 
+    filter(stringr::str_detect(Species,"[ ]$")) %>% 
+    .$Species
+  
+  #find periods
+  species.with.fullstop <- complete_data_function %>% 
+    filter(stringr::str_detect(Species,"[.]")) %>% 
+    filter(stringr::str_detect(Species,"p.",negate = T)) %>% 
+    .$Species
+  
+  species.with.fullstop.fixed <- complete_data_function %>% 
+    filter(stringr::str_detect(Species,"[.]")) %>% 
+    filter(stringr::str_detect(Species,"p.",negate = T)) %>% 
+    .$Species %>% 
+    stringr::str_replace_all(pattern = "\\.",replacement = " ")
+  
+  if(length(species.with.uppercase) != 0) warning(paste("The following species records have uppercase species name: \n", 
+                                                        paste(unique(species.with.uppercase),collapse = ", ")))
+  
+  if(length(species.with.double.spaces) != 0) warning(paste("The following species records have double spaces: \n", 
+                                                            paste(unique(species.with.double.spaces),collapse = ", ")))
+  
+  if(length(species.with.space.at.beginning) != 0) warning(paste("The following species records have space at beginning of record: \n", 
+                                                                 paste(unique(species.with.space.at.beginning),collapse = ", ")))
+  
+  if(length(species.with.fullstop) != 0) warning(paste("The following species records have full stops: \n", 
+                                                       paste(unique(species.with.fullstop),collapse = ", ")))
+  
+  corrected <- complete_data_function %>% 
+    mutate(Species = replace(Species, which(Species %in% species.with.fullstop),species.with.fullstop.fixed),
+           Species = stringr::str_squish(Species),
+           Species = stringr::str_to_sentence(Species))
+  return(corrected)
+}

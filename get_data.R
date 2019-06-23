@@ -7,6 +7,7 @@ source("googlesheets.R")
 
 bioblitzdata <- create_full_data() %>% 
   clean_full_data() %>% 
+  correct_species_name() %>% 
   add_species_data()
 
 # this saves the data as an R object if you wish:

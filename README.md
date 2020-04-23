@@ -7,6 +7,4 @@ This repo was created to combine and share all of the documentation that is requ
 * Protocols
 etc.
 
-If you are unfamiliar with GitHub, please read the following, short documentation: [Hello World](https://guides.github.com/activities/hello-world/)
-
-![Mediterranean Fish Guide](https://sites.google.com/view/medfish)
+[Mediterranean Fish Guide](https://sites.google.com/view/medfish)
